@@ -75,8 +75,10 @@
             <td collspan=8><h1>Data tidak tersedia.</h1></td>
         </tr>
     @endforelse
+
+  {{ $products->links() }}
   </tbody>
 </table>
-{{ $products->links() }}
+
 
 @endsection

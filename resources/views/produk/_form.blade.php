@@ -82,7 +82,7 @@
 </div>
 
 <button class="btn btn-success mt-3" type="submit">Simpan</button>
-<a href="{{ route('produk.index') }}" class="btn btn-secondary mt_3">Kembali</a>
+
 
 <script>
     function previewImage(input) {
@@ -95,6 +95,6 @@
         }
     }
 </script>
-
+<a href="{{ route('produk.index') }}" class="btn btn-secondary mt-3">Kembali</a>
 
 
