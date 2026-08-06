@@ -54,5 +54,5 @@
     @enderror
 </div>
 
-<button class="btn btn-success">Simpan</button>
-<a href="{{ route('admin.users')}}" class="btn btn-secondary">Kembali</a>
+<button class="btn btn-simpan">Simpan</button>
+<a href="{{ route('admin.users')}}" class="btn btn-kembali">Kembali</a>

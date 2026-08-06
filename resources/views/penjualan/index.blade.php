@@ -138,7 +138,7 @@
   </div>
   @endif
 
-  <h1 class="page-title">Halaman Penjualan</h1>
+  <h1 class="page-title">Riwayat Penjualan</h1>
 
   <a href="{{ route('penjualan.create') }}" class="btn btn-create">Create</a>
 

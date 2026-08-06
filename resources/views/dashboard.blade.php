@@ -25,6 +25,7 @@
   body{ background: var(--butter-soft); }
 
   .page-title h1{
+    margin-top: 5px;
     font-weight: 800;
     color: var(--ink);
   }
