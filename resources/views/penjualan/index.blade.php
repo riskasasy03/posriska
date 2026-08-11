@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('layouts.navbar')
-
 <style>
   :root{
     --butter:#F5E7A3;
@@ -130,7 +128,7 @@
   }
 </style>
 
-<div class="page-wrap">
+@include('layouts.navbar')
 
   @if(session('errors'))
   <div class="alert alert-danger">

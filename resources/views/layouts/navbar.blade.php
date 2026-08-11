@@ -9,9 +9,12 @@
         <li class="nav-item">
           <a class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}" aria-current="page" href="{{ route('dashboard') }}">Dashboard</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link {{ Request::is('admin/users') ? 'active' : '' }}" href="{{ route('admin.users') }}">Users</a>
-        </li>
+        {{-- Menu Users hanya untuk admin(role_id = 1) --}}
+        @if(auth()->user()->role_id === 1)
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('admin/users') ? 'active' : '' }}" href="{{ route('admin.users') }}">Users</a>
+          </li>
+        @endif
         <li class="nav-item">
           <a class="nav-link {{ Request::is('produk') ? 'active' : '' }}" href="{{ route('produk.index') }}">Produk</a>
         </li>
@@ -41,7 +44,7 @@
   }
 
   .pos-navbar{
-    background: var(--card) !important;
+    background: var(--card);
     border-radius: 14px;
     box-shadow: var(--shadow);
     padding: 10px 18px;
