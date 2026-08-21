@@ -100,29 +100,68 @@
     padding: .45rem 1rem;
   }
   .btn-detail:hover{
-    background: #2A251A;
+    background: #000000;
     color: var(--butter-soft);
   }
-  .badge-status{
-    display:inline-block;
-    padding:.35rem .75rem;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:700;
-    text-transform:uppercase;
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(60, 50, 20, 0.35);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
   }
-  .badge-completed{
-    background: var(--success-soft);
-    color: var(--success);
+  .modal-overlay.show { display: flex; }
+ 
+  .modal-box {
+    background: #FFF6D9;
+    border: 1px solid #F0DFA0;
+    border-radius: 16px;
+    padding: 40px 35px 32px;
+    text-align: center;
+    width: 330px;
+    box-shadow: 0 15px 35px rgba(180, 150, 40, 0.25);
+    animation: popIn 0.2s ease-out;
   }
-  .badge-pending{
-    background:#FDECD3;
-    color:#B5791A;
+  @keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
   }
-  .badge-cancelled{
-    background:#FBE3DC;
-    color: var(--danger-deep);
+ 
+  .modal-icon-wrap {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 18px;
+    background: #F5DE85;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+ 
+  .modal-box h2 {
+    margin: 0 0 6px;
+    color: #4a3c0d;
+    font-size: 19px;
+  }
+  .modal-sub {
+    margin: 0 0 24px;
+    color: #8a763a;
+    font-size: 13px;
+  }
+ 
+  .btn-tutup {
+    background: #E7BE4C;
+    border: none;
+    padding: 10px 34px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #2b2b2b;
+    cursor: pointer;
+  }
+  .btn-tutup:hover { background: #d4ac3a; }
   .aksi-sep{
     color: var(--ink-soft);
   }
@@ -178,7 +217,7 @@
           <td>{{$sale->metode_pembayaran}}</td>
           <td>{{$sale->status}}</td>
           <td>
-             <a href="" class="btn btn-sm btn-detail">Detail</a>
+            <button type="button" class="btn btn-sm btn-detail" onclick="showDetailPennjualan('Lunas')">Detail</button>
              @can('view', $sale)
              <span class="aksi-sep">||</span>
              <a href="{{ route('penjualan.edit', $sale) }}" class="btn btn-sm btn-edit">Edit</a>
@@ -202,6 +241,38 @@
         @endforelse
       </tbody>
     </table>
+
+      <div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+      <div class="modal-icon-wrap">
+        <svg viewBox="0 0 24 24" width="34" height="34">
+          <path d="M5 13l4 4L19 7" fill="none" stroke="#8a6d1f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>Transaksi telah Selesai</h2>
+      <button class="btn-tutup" id="closeModalBtn">Tutup</button>
+    </div>
+  </div>
+  
+  <script>
+    const modal = document.getElementById('successModal');
+  
+    document.querySelectorAll('.btn-detail').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.classList.add('show');
+      });
+    });
+  
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+      modal.classList.remove('show');
+    });
+  
+    // klik di luar modal-box juga nutup
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('show');
+    });
+  </script>
+
   </div>
 
   {{$sales->links()}}

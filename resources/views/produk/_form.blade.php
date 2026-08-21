@@ -129,6 +129,25 @@
         @enderror
 </div>
 
+<div class="mt-3">
+    <label class="produk-form-label">Jenis</label><br>
+    <select name="jenis_id"
+            class="form-control @error('jenis_id') is-invalid @enderror">
+        <option value="">-- Pilih Jenis --</option>
+        @foreach($jenis as $item)
+           <option value="{{ $item->id }}"
+                 @selected(old('jenis_id', $produk->jenis_id ?? '') == $item->id)>
+                 {{ $item->nama_jenis }}
+           </option>
+        @endforeach
+    </select>
+    @error('jenis_id')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
+
 <div>
     <label class="produk-form-label">Harga Beli</label><br>
     <input type="number" name="purchase_price"
