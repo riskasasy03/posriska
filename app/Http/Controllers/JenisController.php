@@ -11,8 +11,7 @@ class JenisController extends Controller
     {
         $search = $request->input('search');
 
-        $jenis = Jenis::withCount('produk')
-            ->when($search, function ($query) use ($search) {
+        $jenis = Jenis::when($search, function ($query) use ($search) {
                 $query->where('nama_jenis', 'like', "%{$search}%");
             })
             ->orderBy('nama_jenis')

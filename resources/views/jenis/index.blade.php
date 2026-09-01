@@ -83,7 +83,6 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Nama Jenis</th>
-          <th scope="col">Jumlah Produk</th>
           <th scope="col">Aksi</th>
         </tr>
       </thead>
@@ -92,7 +91,7 @@
         <tr>
             <td>{{ $jenis->firstItem() + $loop->index }}</td>
             <td>{{ $item->nama_jenis }}</td>
-            <td>{{ $item->produk_count }} produk</td>
+
             <td>
                 <a href="{{ route('jenis.edit', $item) }}" class="btn btn-sm btn-edit">Edit</a>
                 <span class="aksi-sep">||</span>
