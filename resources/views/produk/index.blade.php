@@ -127,6 +127,18 @@
   .aksi-sep{
     color: var(--line);
   }
+
+  /* Wrapper flex di DALAM td, bukan pada td itu sendiri,
+     supaya vertical-align: middle bawaan td tetap berfungsi
+     dan tombol Aksi sejajar dengan baris lain. */
+  .aksi-wrap{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .aksi-wrap form{
+    display: inline-flex;
+  }
 </style>
 
 @include('layouts.navbar')
@@ -182,25 +194,27 @@
       <td>{{ $product->harga_beli }}</td>
       <td>{{ $product->harga_jual }}</td>
       <td>{{ $product->stok }}</td>
-      <td class="d-flex gap-1 align-items-center">
-        @can('update', $product)
-        <a href="{{ route('produk.edit', $product) }}" class="btn btn-edit">Edit</a>
-        @endcan
-        <span class="aksi-sep">||</span>
-        @can('delete', $product)
-        <form action="{{ route('produk.destroy', $product) }}" method="POST" class="d-inline">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-hapus" onclick="return confirm('Apakah anda yakin menghapus user ini?')">
-                Hapus
-            </button>
-        </form>
-        @endcan
+      <td>
+        <div class="aksi-wrap">
+          @can('update', $product)
+          <a href="{{ route('produk.edit', $product) }}" class="btn btn-edit">Edit</a>
+          @endcan
+          <span class="aksi-sep">||</span>
+          @can('delete', $product)
+          <form action="{{ route('produk.destroy', $product) }}" method="POST">
+              @csrf
+              @method('DELETE')
+              <button class="btn btn-hapus" onclick="return confirm('Apakah anda yakin menghapus user ini?')">
+                  Hapus
+              </button>
+          </form>
+          @endcan
+        </div>
       </td>
     </tr>
     @empty
         <tr>
-            <td collspan=8><h1>Data tidak tersedia.</h1></td>
+            <td colspan="9"><h1>Data tidak tersedia.</h1></td>
         </tr>
     @endforelse
 

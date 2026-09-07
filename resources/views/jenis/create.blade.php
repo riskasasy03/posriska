@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('layouts.navbar')
+
 <div class="container-fluid" style="max-width: 1100px;">
     <h4 class="form-page-title">Tambah Jenis</h4>
     <div class="form-card">

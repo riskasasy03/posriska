@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               8.0.30 - MySQL Community Server - GPL
+-- Server version:               8.4.3 - MySQL Community Server - GPL
 -- Server OS:                    Win64
--- HeidiSQL Version:             12.1.0.6537
+-- HeidiSQL Version:             12.8.0.6908
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -21,8 +21,8 @@ USE `posriska`;
 
 -- Dumping structure for table posriska.cache
 CREATE TABLE IF NOT EXISTS `cache` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS `cache` (
 
 -- Dumping structure for table posriska.cache_locks
 CREATE TABLE IF NOT EXISTS `cache_locks` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -42,11 +42,11 @@ CREATE TABLE IF NOT EXISTS `cache_locks` (
 -- Dumping structure for table posriska.failed_jobs
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -69,27 +69,37 @@ CREATE TABLE IF NOT EXISTS `item_penjualan` (
   KEY `item_penjualan_produk_id_foreign` (`produk_id`),
   CONSTRAINT `item_penjualan_penjualan_id_foreign` FOREIGN KEY (`penjualan_id`) REFERENCES `penjualan` (`id`),
   CONSTRAINT `item_penjualan_produk_id_foreign` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.item_penjualan: ~157 rows (approximately)
+-- Dumping data for table posriska.item_penjualan: ~5 rows (approximately)
 INSERT INTO `item_penjualan` (`id`, `penjualan_id`, `produk_id`, `kuantitas`, `harga_satuan`, `subtotal`, `created_at`, `updated_at`) VALUES
 	(1, 1, 1, 1, 25000, 25000, '2026-09-01 20:55:53', '2026-09-01 20:55:53'),
 	(2, 1, 6, 1, 18000, 18000, '2026-09-01 20:55:54', '2026-09-01 20:55:54'),
 	(3, 2, 2, 1, 25000, 25000, '2026-09-01 20:56:01', '2026-09-01 20:56:01'),
 	(4, 2, 9, 1, 15000, 15000, '2026-09-01 20:56:04', '2026-09-01 20:56:04'),
-	(5, 2, 3, 1, 45000, 45000, '2026-09-01 20:56:06', '2026-09-01 20:56:06');
+	(5, 2, 3, 1, 45000, 45000, '2026-09-01 20:56:06', '2026-09-01 20:56:06'),
+	(6, 3, 2, 1, 25000, 25000, '2026-09-06 23:42:44', '2026-09-06 23:42:44'),
+	(7, 3, 6, 1, 18000, 18000, '2026-09-06 23:42:47', '2026-09-06 23:42:47'),
+	(8, 3, 3, 1, 45000, 45000, '2026-09-06 23:42:53', '2026-09-06 23:42:53'),
+	(9, 3, 10, 1, 26000, 26000, '2026-09-06 23:43:03', '2026-09-06 23:43:03'),
+	(10, 3, 8, 1, 22000, 22000, '2026-09-06 23:43:07', '2026-09-06 23:43:07'),
+	(11, 3, 1, 1, 25000, 25000, '2026-09-06 23:43:14', '2026-09-06 23:43:14'),
+	(12, 4, 9, 1, 15000, 15000, '2026-09-06 23:45:55', '2026-09-06 23:45:55'),
+	(13, 4, 3, 1, 45000, 45000, '2026-09-06 23:45:58', '2026-09-06 23:45:58'),
+	(14, 5, 5, 1, 20000, 20000, '2026-09-06 23:46:10', '2026-09-06 23:46:10'),
+	(15, 5, 6, 1, 18000, 18000, '2026-09-06 23:46:15', '2026-09-06 23:46:15');
 
 -- Dumping structure for table posriska.jenis
 CREATE TABLE IF NOT EXISTS `jenis` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `nama_jenis` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_jenis` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `jenis_nama_jenis_unique` (`nama_jenis`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.jenis: ~0 rows (approximately)
+-- Dumping data for table posriska.jenis: ~2 rows (approximately)
 INSERT INTO `jenis` (`id`, `nama_jenis`, `created_at`, `updated_at`) VALUES
 	(1, 'Minuman', '2026-09-01 20:35:09', '2026-09-01 20:35:09'),
 	(2, 'Makanan', '2026-09-01 20:35:16', '2026-09-01 20:35:16');
@@ -97,8 +107,8 @@ INSERT INTO `jenis` (`id`, `nama_jenis`, `created_at`, `updated_at`) VALUES
 -- Dumping structure for table posriska.jobs
 CREATE TABLE IF NOT EXISTS `jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `attempts` tinyint unsigned NOT NULL,
   `reserved_at` int unsigned DEFAULT NULL,
   `available_at` int unsigned NOT NULL,
@@ -111,13 +121,13 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 -- Dumping structure for table posriska.job_batches
 CREATE TABLE IF NOT EXISTS `job_batches` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_jobs` int NOT NULL,
   `pending_jobs` int NOT NULL,
   `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `failed_job_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `cancelled_at` int DEFAULT NULL,
   `created_at` int NOT NULL,
   `finished_at` int DEFAULT NULL,
@@ -129,12 +139,12 @@ CREATE TABLE IF NOT EXISTS `job_batches` (
 -- Dumping structure for table posriska.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.migrations: ~1 rows (approximately)
+-- Dumping data for table posriska.migrations: ~9 rows (approximately)
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '0001_01_01_000000_create_roles_table', 1),
 	(2, '0001_01_01_000000_create_users_table', 1),
@@ -148,8 +158,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 -- Dumping structure for table posriska.password_reset_tokens
 CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -161,27 +171,30 @@ CREATE TABLE IF NOT EXISTS `penjualan` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
   `total_pembayaran` int NOT NULL,
-  `metode_pembayaran` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('OPEN','COMPLETED') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `metode_pembayaran` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('OPEN','COMPLETED') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `penjualan_user_id_foreign` (`user_id`),
   CONSTRAINT `penjualan_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.penjualan: ~0 rows (approximately)
+-- Dumping data for table posriska.penjualan: ~2 rows (approximately)
 INSERT INTO `penjualan` (`id`, `user_id`, `total_pembayaran`, `metode_pembayaran`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 2, 43000, 'CASH', 'COMPLETED', '2026-09-01 20:55:47', '2026-09-01 20:55:57'),
-	(2, 2, 85000, 'QRIS', 'COMPLETED', '2026-09-01 20:55:59', '2026-09-01 20:56:11');
+	(2, 2, 85000, 'QRIS', 'COMPLETED', '2026-09-01 20:55:59', '2026-09-01 20:56:11'),
+	(3, 7, 161000, 'CASH', 'OPEN', '2026-09-06 23:42:41', '2026-09-06 23:43:14'),
+	(4, 8, 60000, 'QRIS', 'COMPLETED', '2026-09-06 23:45:51', '2026-09-06 23:46:03'),
+	(5, 8, 38000, 'CASH', 'OPEN', '2026-09-06 23:46:06', '2026-09-06 23:46:15');
 
 -- Dumping structure for table posriska.produk
 CREATE TABLE IF NOT EXISTS `produk` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `jenis_id` bigint unsigned DEFAULT NULL,
   `user_id` bigint unsigned NOT NULL,
-  `foto` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `harga_beli` int NOT NULL,
   `harga_jual` int NOT NULL,
   `stok` int NOT NULL,
@@ -195,59 +208,59 @@ CREATE TABLE IF NOT EXISTS `produk` (
   CONSTRAINT `produk_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.produk: ~10 rows (approximately)
+-- Dumping data for table posriska.produk: ~0 rows (approximately)
 INSERT INTO `produk` (`id`, `jenis_id`, `user_id`, `foto`, `nama`, `harga_beli`, `harga_jual`, `stok`, `created_at`, `updated_at`) VALUES
-	(1, 2, 2, 'products/bEyXwaGpPatbS0KzyHimmej021ht5GGBsuxZP9BV.jpg', 'Brownies', 20000, 25000, 49, '2026-09-01 20:37:39', '2026-09-01 20:55:53'),
-	(2, 2, 2, 'products/d3DR4WDTK2JGaJNbLOxF5ReCVa49S6M4dRx5YSKK.jpg', 'Chocolate Cookies And Cream Cookies', 20000, 25000, 49, '2026-09-01 20:38:46', '2026-09-01 20:56:01'),
-	(3, 2, 2, 'products/6gODxi94EjmgbJRbOh885hlGSgCXKOyaXLItqWuI.jpg', 'Lemon Blueberry Sourdough Bread', 35000, 45000, 59, '2026-09-01 20:39:33', '2026-09-01 20:56:06'),
+	(1, 2, 2, 'products/bEyXwaGpPatbS0KzyHimmej021ht5GGBsuxZP9BV.jpg', 'Brownies', 20000, 25000, 48, '2026-09-01 20:37:39', '2026-09-06 23:43:14'),
+	(2, 2, 2, 'products/d3DR4WDTK2JGaJNbLOxF5ReCVa49S6M4dRx5YSKK.jpg', 'Chocolate Cookies And Cream Cookies', 20000, 25000, 48, '2026-09-01 20:38:46', '2026-09-06 23:42:44'),
+	(3, 2, 2, 'products/6gODxi94EjmgbJRbOh885hlGSgCXKOyaXLItqWuI.jpg', 'Lemon Blueberry Sourdough Bread', 35000, 45000, 57, '2026-09-01 20:39:33', '2026-09-06 23:45:58'),
 	(4, 2, 2, 'products/zN3kqt3M8NUFc2fN32c87Y3XmxolGu3qCz46PAI1.jpg', 'Cinnamon rolls', 30000, 35000, 50, '2026-09-01 20:45:08', '2026-09-01 20:45:08'),
-	(5, 2, 2, 'products/IAqDKeYGg3LJlCwOTWKb4ID1xLsPyTzHwBbzJy28.jpg', 'Tiramisu Croissant', 15000, 20000, 60, '2026-09-01 20:47:11', '2026-09-01 20:47:11'),
-	(6, 1, 2, 'products/jWo2udQS9YEAFLpmeqwV06HeDhBn9LHUJYccgkkc.jpg', 'Iced Americano', 10000, 18000, 49, '2026-09-01 20:48:45', '2026-09-01 20:55:54'),
+	(5, 2, 2, 'products/IAqDKeYGg3LJlCwOTWKb4ID1xLsPyTzHwBbzJy28.jpg', 'Tiramisu Croissant', 15000, 20000, 59, '2026-09-01 20:47:11', '2026-09-06 23:46:10'),
+	(6, 1, 2, 'products/jWo2udQS9YEAFLpmeqwV06HeDhBn9LHUJYccgkkc.jpg', 'Iced Americano', 10000, 18000, 47, '2026-09-01 20:48:45', '2026-09-06 23:46:15'),
 	(7, 1, 2, 'products/vrLHGKxUp1G9P8cxaC11d7J83u8Wh7LsTWsCB8XT.jpg', 'Signature Iced Chocolate', 12000, 19000, 60, '2026-09-01 20:49:47', '2026-09-01 20:49:47'),
-	(8, 1, 2, 'products/fpTeZ1zywX1I58Dd9ZugJmPJavW2k6dy9klGC6Rs.jpg', 'Signature Iced Matcha Latte', 15000, 22000, 60, '2026-09-01 20:50:36', '2026-09-01 20:50:36'),
-	(9, 1, 2, 'products/WCfjDj7q8LHCBgizxFRz3ilOVhMynAojNnh7GEdk.jpg', 'Iced Plain Latte (Espresso Base)', 10000, 15000, 49, '2026-09-01 20:51:20', '2026-09-01 20:56:04'),
-	(10, 1, 2, 'products/MEc8tIrT84HZ8a5UGq5Lgvk04rXRMhK0i9avozOc.jpg', 'Signature Iced Hazelnut Chocolate', 19000, 26000, 60, '2026-09-01 20:55:39', '2026-09-01 20:55:39');
+	(8, 1, 2, 'products/fpTeZ1zywX1I58Dd9ZugJmPJavW2k6dy9klGC6Rs.jpg', 'Signature Iced Matcha Latte', 15000, 22000, 59, '2026-09-01 20:50:36', '2026-09-06 23:43:07'),
+	(9, 1, 2, 'products/WCfjDj7q8LHCBgizxFRz3ilOVhMynAojNnh7GEdk.jpg', 'Iced Plain Latte (Espresso Base)', 10000, 15000, 48, '2026-09-01 20:51:20', '2026-09-06 23:45:55'),
+	(10, 1, 2, 'products/MEc8tIrT84HZ8a5UGq5Lgvk04rXRMhK0i9avozOc.jpg', 'Signature Iced Hazelnut Chocolate', 19000, 26000, 59, '2026-09-01 20:55:39', '2026-09-06 23:43:03');
 
 -- Dumping structure for table posriska.roles
 CREATE TABLE IF NOT EXISTS `roles` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.roles: ~2 rows (approximately)
+-- Dumping data for table posriska.roles: ~0 rows (approximately)
 INSERT INTO `roles` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(1, 'admin', '2026-09-01 20:02:58', '2026-09-01 20:02:58'),
 	(2, 'kasir', '2026-09-01 20:02:58', '2026-09-01 20:02:58');
 
 -- Dumping structure for table posriska.sessions
 CREATE TABLE IF NOT EXISTS `sessions` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_unicode_ci,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.sessions: ~1 rows (approximately)
+-- Dumping data for table posriska.sessions: ~0 rows (approximately)
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-	('sIcIWRNayZS3DnKxIM63rljOBYkA82SwvZUEEcJ0', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiS01pYVpRc1NwSjNVaTN3RFM0c3pPbmcyRWIxaWhid3pWcXo3V29SWSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wZW5qdWFsYW4iO3M6NToicm91dGUiO3M6MTU6InBlbmp1YWxhbi5pbmRleCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1788321375);
+	('lat5PI3KlPTY07h8CgNlgo8X1j3iVBBfNHmCYgQ6', 7, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVkNNbFlTNW1GYkhvcEdUWm1JQ3FDRXpTSnV1QnB2aW5nMUZoM1JTOCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wZW5qdWFsYW4iO3M6NToicm91dGUiO3M6MTU6InBlbmp1YWxhbi5pbmRleCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjc7fQ==', 1788764614);
 
 -- Dumping structure for table posriska.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `role_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),

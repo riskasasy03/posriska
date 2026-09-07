@@ -3,7 +3,10 @@
 @section('title', 'Tambah Produk')
 
 @section('content')
-<h4>Tambah Produk</h4>
+
+@include('layouts.navbar')
+
+<h4 class="form-page-title">Tambah Produk</h4>
 
 <form action="{{ route('produk.store') }}" 
       method="POST"

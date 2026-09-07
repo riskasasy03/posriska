@@ -103,7 +103,13 @@
     background: #000000;
     color: var(--butter-soft);
   }
-.modal-overlay {
+
+  .aksi-sep{
+    color: var(--ink-soft);
+  }
+
+  /* ===== Modal overlay ===== */
+  .modal-overlay {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
@@ -114,57 +120,114 @@
     z-index: 1000;
   }
   .modal-overlay.show { display: flex; }
- 
-  .modal-box {
-    background: #FFF6D9;
-    border: 1px solid #F0DFA0;
-    border-radius: 16px;
-    padding: 40px 35px 32px;
-    text-align: center;
-    width: 330px;
+
+  /* ===== Struk (receipt) ===== */
+  .receipt-box {
+    background: var(--card);
+    border-radius: 4px;
+    width: 320px;
     box-shadow: 0 15px 35px rgba(180, 150, 40, 0.25);
     animation: popIn 0.2s ease-out;
+    padding-bottom: 20px;
   }
   @keyframes popIn {
     from { transform: scale(0.9); opacity: 0; }
     to   { transform: scale(1); opacity: 1; }
   }
- 
-  .modal-icon-wrap {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 18px;
-    background: #F5DE85;
+
+  .receipt-zigzag{
+    height: 10px;
+    width: 100%;
+    background:
+      linear-gradient(135deg, var(--card) 50%, transparent 50%) 0 0/12px 12px repeat-x,
+      linear-gradient(-135deg, var(--card) 50%, transparent 50%) 0 0/12px 12px repeat-x;
+    background-color: rgba(60, 50, 20, 0.35);
+  }
+
+  .receipt-header{
+    padding: 22px 26px 0;
+    text-align: center;
+  }
+  .receipt-icon-wrap {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 14px;
+    background: var(--butter);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
- 
-  .modal-box h2 {
-    margin: 0 0 6px;
-    color: #4a3c0d;
-    font-size: 19px;
+  .receipt-icon-wrap.pending{
+    background: var(--butter-soft);
+    border: 1.5px dashed var(--accent-deep);
   }
-  .modal-sub {
-    margin: 0 0 24px;
-    color: #8a763a;
-    font-size: 13px;
+  .receipt-header h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 700;
   }
- 
+  .receipt-sub {
+    margin: 6px 0 0;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+
+  .receipt-section{
+    margin: 16px 26px 0;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+  }
+  .receipt-row{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .receipt-row:last-child{ margin-bottom: 0; }
+  .receipt-row span:last-child{
+    color: var(--ink);
+    font-weight: 600;
+    text-align: right;
+  }
+  .receipt-row.total span{
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .receipt-status{
+    display: inline-block;
+    margin-top: 2px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--success-soft);
+    color: var(--success);
+  }
+  .receipt-status.pending{
+    background: var(--butter);
+    color: var(--accent-deep);
+  }
+
+  .receipt-footer{
+    margin: 18px 26px 0;
+  }
   .btn-tutup {
-    background: #E7BE4C;
+    width: 100%;
+    background: var(--accent);
     border: none;
-    padding: 10px 34px;
+    padding: 11px;
     border-radius: 8px;
-    font-weight: bold;
-    color: #2b2b2b;
+    font-weight: 700;
+    color: var(--ink);
     cursor: pointer;
   }
-  .btn-tutup:hover { background: #d4ac3a; }
-  .aksi-sep{
-    color: var(--ink-soft);
-  }
+  .btn-tutup:hover { background: var(--accent-deep); }
 </style>
 
 @include('layouts.navbar')
@@ -217,7 +280,16 @@
           <td>{{$sale->metode_pembayaran}}</td>
           <td>{{$sale->status}}</td>
           <td>
-            <button type="button" class="btn btn-sm btn-detail" onclick="showDetailPennjualan('Lunas')">Detail</button>
+            <button
+              type="button"
+              class="btn btn-sm btn-detail"
+              data-id="{{$sale->id}}"
+              data-tanggal="{{$sale->created_at->translatedFormat('d-m-Y H:i')}}"
+              data-kasir="{{$sale->user->name}}"
+              data-total="Rp.{{number_format($sale->total_pembayaran)}}"
+              data-metode="{{$sale->metode_pembayaran}}"
+              data-status="{{$sale->status}}"
+            >Detail</button>
              @can('view', $sale)
              <span class="aksi-sep">||</span>
              <a href="{{ route('penjualan.edit', $sale) }}" class="btn btn-sm btn-edit">Edit</a>
@@ -242,36 +314,86 @@
       </tbody>
     </table>
 
-      <div class="modal-overlay" id="successModal">
-    <div class="modal-box">
-      <div class="modal-icon-wrap">
-        <svg viewBox="0 0 24 24" width="34" height="34">
-          <path d="M5 13l4 4L19 7" fill="none" stroke="#8a6d1f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+    <div class="modal-overlay" id="successModal">
+      <div class="receipt-box">
+        <div class="receipt-zigzag"></div>
+
+        <div class="receipt-header">
+          <div class="receipt-icon-wrap" id="rcIconWrap">
+            <svg id="rcIconCheck" viewBox="0 0 24 24" width="28" height="28">
+              <path d="M5 13l4 4L19 7" fill="none" stroke="#8a6d1f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg id="rcIconPending" viewBox="0 0 24 24" width="26" height="26" style="display:none;">
+              <circle cx="12" cy="12" r="9" fill="none" stroke="#a3792a" stroke-width="2.2"/>
+              <path d="M12 7v5l3.5 2" fill="none" stroke="#a3792a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2 id="rcTitle">Transaksi telah selesai</h2>
+          <p class="receipt-sub" id="rcTransaksiId">#—</p>
+        </div>
+
+        <div class="receipt-section">
+          <div class="receipt-row"><span>Tanggal</span><span id="rcTanggal">-</span></div>
+          <div class="receipt-row"><span>Kasir</span><span id="rcKasir">-</span></div>
+        </div>
+
+        <div class="receipt-section">
+          <div class="receipt-row"><span>Metode pembayaran</span><span id="rcMetode">-</span></div>
+          <div class="receipt-row">
+            <span>Status</span>
+            <span><span class="receipt-status" id="rcStatus">-</span></span>
+          </div>
+        </div>
+
+        <div class="receipt-section">
+          <div class="receipt-row total"><span>Total pembayaran</span><span id="rcTotal">-</span></div>
+        </div>
+
+        <div class="receipt-footer">
+          <button class="btn-tutup" id="closeModalBtn">Tutup</button>
+        </div>
       </div>
-      <h2>Transaksi telah Selesai</h2>
-      <button class="btn-tutup" id="closeModalBtn">Tutup</button>
     </div>
-  </div>
-  
-  <script>
-    const modal = document.getElementById('successModal');
-  
-    document.querySelectorAll('.btn-detail').forEach(btn => {
-      btn.addEventListener('click', () => {
-        modal.classList.add('show');
+
+    <script>
+      const modal = document.getElementById('successModal');
+
+      document.querySelectorAll('.btn-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('rcTransaksiId').textContent = '#' + btn.dataset.id;
+          document.getElementById('rcTanggal').textContent = btn.dataset.tanggal;
+          document.getElementById('rcKasir').textContent = btn.dataset.kasir;
+          document.getElementById('rcMetode').textContent = btn.dataset.metode;
+          document.getElementById('rcTotal').textContent = btn.dataset.total;
+
+          const status = btn.dataset.status;
+          const isPaid = ['lunas', 'complete', 'completed'].includes(status.toLowerCase());
+
+          const statusEl = document.getElementById('rcStatus');
+          statusEl.textContent = status;
+          statusEl.classList.toggle('pending', !isPaid);
+
+          document.getElementById('rcTitle').textContent = isPaid
+            ? 'Transaksi telah selesai'
+            : 'Menunggu pembayaran';
+
+          document.getElementById('rcIconWrap').classList.toggle('pending', !isPaid);
+          document.getElementById('rcIconCheck').style.display = isPaid ? 'block' : 'none';
+          document.getElementById('rcIconPending').style.display = isPaid ? 'none' : 'block';
+
+          modal.classList.add('show');
+        });
       });
-    });
-  
-    document.getElementById('closeModalBtn').addEventListener('click', () => {
-      modal.classList.remove('show');
-    });
-  
-    // klik di luar modal-box juga nutup
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.remove('show');
-    });
-  </script>
+
+      document.getElementById('closeModalBtn').addEventListener('click', () => {
+        modal.classList.remove('show');
+      });
+
+      // klik di luar modal-box juga nutup
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('show');
+      });
+    </script>
 
   </div>
 
