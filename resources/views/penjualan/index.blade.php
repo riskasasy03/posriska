@@ -16,7 +16,7 @@
     --danger:#D9724A;
     --danger-deep:#C25E38;
     --line:#EDE3BE;
-    --success:#3FA66B;        /* tambahan untuk badge status */
+    --success:#3FA66B;       
     --success-soft:#E6F5EC;
     --shadow:0 16px 40px -20px rgba(58,51,36,0.22);
   }
@@ -199,6 +199,11 @@
     font-weight: 800;
   }
 
+  .receipt-row.kembalian span:last-child{
+    color: var(--accent-deep);
+    font-weight: 800;
+  }
+
   .receipt-status{
     display: inline-block;
     margin-top: 2px;
@@ -280,6 +285,10 @@
           <td>{{$sale->metode_pembayaran}}</td>
           <td>{{$sale->status}}</td>
           <td>
+            @php
+              $uangDiterima = $sale->uang_diterima ?? 0;
+              $kembalian = max(0, $uangDiterima - $sale->total_pembayaran);
+            @endphp
             <button
               type="button"
               class="btn btn-sm btn-detail"
@@ -289,6 +298,8 @@
               data-total="Rp.{{number_format($sale->total_pembayaran)}}"
               data-metode="{{$sale->metode_pembayaran}}"
               data-status="{{$sale->status}}"
+              data-uang-diterima="Rp.{{number_format($uangDiterima)}}"
+              data-kembalian="Rp.{{number_format($kembalian)}}"
             >Detail</button>
              @can('view', $sale)
              <span class="aksi-sep">||</span>
@@ -345,6 +356,12 @@
           </div>
         </div>
 
+        {{-- ---- Detail Uang Diterima & Kembalian (khusus CASH) ---- --}}
+        <div class="receipt-section" id="rcCashSection" style="display:none;">
+          <div class="receipt-row"><span>Uang diterima</span><span id="rcUangDiterima">-</span></div>
+          <div class="receipt-row kembalian"><span>Kembalian</span><span id="rcKembalian">-</span></div>
+        </div>
+
         <div class="receipt-section">
           <div class="receipt-row total"><span>Total pembayaran</span><span id="rcTotal">-</span></div>
         </div>
@@ -380,6 +397,17 @@
           document.getElementById('rcIconWrap').classList.toggle('pending', !isPaid);
           document.getElementById('rcIconCheck').style.display = isPaid ? 'block' : 'none';
           document.getElementById('rcIconPending').style.display = isPaid ? 'none' : 'block';
+
+          // Tampilkan Uang Diterima & Kembalian hanya untuk metode CASH
+          const metode = (btn.dataset.metode || '').toUpperCase();
+          const cashSection = document.getElementById('rcCashSection');
+          if (metode === 'CASH') {
+            document.getElementById('rcUangDiterima').textContent = btn.dataset.uangDiterima;
+            document.getElementById('rcKembalian').textContent = btn.dataset.kembalian;
+            cashSection.style.display = 'block';
+          } else {
+            cashSection.style.display = 'none';
+          }
 
           modal.classList.add('show');
         });
