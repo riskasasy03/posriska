@@ -56,10 +56,11 @@
         <label class="form-label">Nama Jenis</label>
         <input type="text" name="nama_jenis"
                class="form-control @error('nama_jenis') is-invalid @enderror"
-               value="{{ old('nama_jenis', $jenis->nama_jenis ?? '') }}"
-               placeholder="Contoh: Cake, Minuman, Snack">
+               value="{{ old('nama_jenis', $jenis->nama_jenis ?? '') }}">
         @error('nama_jenis')
-            <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
         @enderror
     </div>
 

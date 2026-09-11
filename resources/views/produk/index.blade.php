@@ -139,6 +139,88 @@
   .aksi-wrap form{
     display: inline-flex;
   }
+
+  /* ---------- Confirm modal (hapus produk) ---------- */
+  .confirm-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(58, 51, 36, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .confirm-overlay.show { display: flex; }
+
+  .confirm-box {
+    background: var(--card);
+    border-radius: 14px;
+    width: 320px;
+    padding: 26px 24px 22px;
+    text-align: center;
+    box-shadow: 0 20px 45px -15px rgba(58,51,36,0.35);
+    animation: confirmPop 0.15s ease-out;
+  }
+
+  @keyframes confirmPop {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .confirm-icon {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 14px;
+    background: #FBE4DA;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm-title {
+    font-weight: 800;
+    color: var(--ink);
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .confirm-sub {
+    color: var(--ink-soft);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .confirm-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .confirm-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-confirm-batal {
+    background: var(--butter-soft);
+    border: 1.5px solid var(--line) !important;
+    color: var(--ink);
+  }
+
+  .btn-confirm-batal:hover { background: var(--butter); }
+
+  .btn-confirm-ya {
+    background: var(--danger);
+    color: #fff;
+  }
+
+  .btn-confirm-ya:hover { background: var(--danger-deep); }
 </style>
 
 @include('layouts.navbar')
@@ -173,7 +255,7 @@
       <th scope="col">Foto</th>
       <th scope="col">Nama</th>
       <th scope="col">Jenis</th>
-      <th scope="col">Harga Beli</th>
+      <th scope="col">Harga Pokok</th>
       <th scope="col">Harga Jual</th>
       <th scope="col">Stok</th>
       <th scope="col">Aksi</th>
@@ -201,10 +283,10 @@
           @endcan
           <span class="aksi-sep">||</span>
           @can('delete', $product)
-          <form action="{{ route('produk.destroy', $product) }}" method="POST">
+          <form action="{{ route('produk.destroy', $product) }}" method="POST" onsubmit="return sebelumHapusProduk(event)">
               @csrf
               @method('DELETE')
-              <button class="btn btn-hapus" onclick="return confirm('Apakah anda yakin menghapus user ini?')">
+              <button class="btn btn-hapus">
                   Hapus
               </button>
           </form>
@@ -222,5 +304,52 @@
   </tbody>
 </table>
 </div>
+
+{{-- ================== MODAL KONFIRMASI HAPUS PRODUK ================== --}}
+<div class="confirm-overlay" id="confirmHapusModal">
+    <div class="confirm-box">
+        <div class="confirm-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="#c25e38" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="confirm-title">Yakin ingin menghapus produk ini?</div>
+        <div class="confirm-sub">Tindakan ini tidak bisa dibatalkan.</div>
+        <div class="confirm-actions">
+            <button type="button" class="btn-confirm-batal" id="btnBatalHapus">Batal</button>
+            <button type="button" class="btn-confirm-ya" id="btnYaHapus">Ya, Hapus</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let formHapusTerpending = null;
+
+    function sebelumHapusProduk(e) {
+        e.preventDefault();
+        formHapusTerpending = e.target;
+        document.getElementById('confirmHapusModal').classList.add('show');
+        return false;
+    }
+
+    document.getElementById('btnYaHapus').addEventListener('click', () => {
+        document.getElementById('confirmHapusModal').classList.remove('show');
+        if (formHapusTerpending) {
+            formHapusTerpending.submit();
+        }
+    });
+
+    document.getElementById('btnBatalHapus').addEventListener('click', () => {
+        document.getElementById('confirmHapusModal').classList.remove('show');
+        formHapusTerpending = null;
+    });
+
+    document.getElementById('confirmHapusModal').addEventListener('click', (e) => {
+        if (e.target.id === 'confirmHapusModal') {
+            e.target.classList.remove('show');
+            formHapusTerpending = null;
+        }
+    });
+</script>
 
 @endsection

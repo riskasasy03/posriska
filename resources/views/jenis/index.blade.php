@@ -62,6 +62,88 @@
   .btn-hapus{ background: var(--danger); border: none; color: #fff; font-weight: 700; border-radius: 8px; }
   .btn-hapus:hover{ background: var(--danger-deep); }
   .aksi-sep{ color: var(--line); margin: 0 4px; }
+
+  /* ---------- Confirm modal (hapus jenis) ---------- */
+  .confirm-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(58, 51, 36, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .confirm-overlay.show { display: flex; }
+
+  .confirm-box {
+    background: var(--card);
+    border-radius: 14px;
+    width: 320px;
+    padding: 26px 24px 22px;
+    text-align: center;
+    box-shadow: 0 20px 45px -15px rgba(58,51,36,0.35);
+    animation: confirmPop 0.15s ease-out;
+  }
+
+  @keyframes confirmPop {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .confirm-icon {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 14px;
+    background: #FBE4DA;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm-title {
+    font-weight: 800;
+    color: var(--ink);
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .confirm-sub {
+    color: var(--ink-soft);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .confirm-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .confirm-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-confirm-batal {
+    background: var(--butter-soft);
+    border: 1.5px solid var(--line) !important;
+    color: var(--ink);
+  }
+
+  .btn-confirm-batal:hover { background: var(--butter); }
+
+  .btn-confirm-ya {
+    background: var(--danger);
+    color: #fff;
+  }
+
+  .btn-confirm-ya:hover { background: var(--danger-deep); }
 </style>
 
 <div class="page-wrap">
@@ -95,11 +177,10 @@
             <td>
                 <a href="{{ route('jenis.edit', $item) }}" class="btn btn-sm btn-edit">Edit</a>
                 <span class="aksi-sep">||</span>
-                <form action="{{ route('jenis.destroy', $item) }}" method="POST" class="d-inline">
+                <form action="{{ route('jenis.destroy', $item) }}" method="POST" class="d-inline" onsubmit="return sebelumHapusJenis(event)">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-sm btn-hapus"
-                            onclick="return confirm('Yakin hapus jenis ini? Produk terkait tidak ikut terhapus.')">
+                    <button class="btn btn-sm btn-hapus">
                       Hapus
                     </button>
                 </form>
@@ -119,5 +200,52 @@
   </div>
 
 </div>
+
+{{-- ================== MODAL KONFIRMASI HAPUS JENIS ================== --}}
+<div class="confirm-overlay" id="confirmHapusJenisModal">
+    <div class="confirm-box">
+        <div class="confirm-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="#c25e38" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="confirm-title">Yakin hapus jenis ini?</div>
+        <div class="confirm-sub">Produk terkait tidak ikut terhapus.</div>
+        <div class="confirm-actions">
+            <button type="button" class="btn-confirm-batal" id="btnBatalHapusJenis">Batal</button>
+            <button type="button" class="btn-confirm-ya" id="btnYaHapusJenis">Ya, Hapus</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let formHapusJenisTerpending = null;
+
+    function sebelumHapusJenis(e) {
+        e.preventDefault();
+        formHapusJenisTerpending = e.target;
+        document.getElementById('confirmHapusJenisModal').classList.add('show');
+        return false;
+    }
+
+    document.getElementById('btnYaHapusJenis').addEventListener('click', () => {
+        document.getElementById('confirmHapusJenisModal').classList.remove('show');
+        if (formHapusJenisTerpending) {
+            formHapusJenisTerpending.submit();
+        }
+    });
+
+    document.getElementById('btnBatalHapusJenis').addEventListener('click', () => {
+        document.getElementById('confirmHapusJenisModal').classList.remove('show');
+        formHapusJenisTerpending = null;
+    });
+
+    document.getElementById('confirmHapusJenisModal').addEventListener('click', (e) => {
+        if (e.target.id === 'confirmHapusJenisModal') {
+            e.target.classList.remove('show');
+            formHapusJenisTerpending = null;
+        }
+    });
+</script>
 
 @endsection

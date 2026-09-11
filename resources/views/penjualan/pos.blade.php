@@ -150,7 +150,7 @@
   .payment-select {
     border: 1.5px solid var(--line);
     border-radius: 10px;
-    background: var(--card);
+    background-color: var(--card);
   }
 
   .payment-select:focus {
@@ -266,6 +266,99 @@
   .btn-hapus-item:hover {
     background: var(--danger-deep) !important;
   }
+
+  /* ---------- Confirm modal (checkout & batal) ---------- */
+  .confirm-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(58, 51, 36, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .confirm-overlay.show { display: flex; }
+
+  .confirm-box {
+    background: var(--card);
+    border-radius: 14px;
+    width: 320px;
+    padding: 26px 24px 22px;
+    text-align: center;
+    box-shadow: 0 20px 45px -15px rgba(58,51,36,0.35);
+    animation: confirmPop 0.15s ease-out;
+  }
+
+  @keyframes confirmPop {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .confirm-icon {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 14px;
+    background: var(--butter);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm-icon.danger {
+    background: #FBE4DA;
+  }
+
+  .confirm-title {
+    font-weight: 800;
+    color: var(--ink);
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .confirm-sub {
+    color: var(--ink-soft);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .confirm-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .confirm-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-confirm-batal {
+    background: var(--butter-soft);
+    border: 1.5px solid var(--line) !important;
+    color: var(--ink);
+  }
+
+  .btn-confirm-batal:hover { background: var(--butter); }
+
+  .btn-confirm-ya {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  .btn-confirm-ya:hover { background: var(--accent-deep); }
+
+  .btn-confirm-ya.danger {
+    background: var(--danger);
+    color: #fff;
+  }
+
+  .btn-confirm-ya.danger:hover { background: var(--danger-deep); }
 </style>
 
 @if(session('errors'))
@@ -414,7 +507,7 @@
 
                 {{-- ---- Detail Pembayaran QRIS ---- --}}
                 <div id="qrisBox" class="payment-box qris-box" style="display:none;">
-                    <img id="qrisImg" src="" alt="QRIS" style="width:150px; height:150px;">
+                    <img src="{{ asset('images/qr.jpg') }}" alt="QRIS" style="width:150px; height:150px;">
                     <div class="qris-box-caption">SCAN UNTUK BAYAR</div>
                     <div class="qris-box-total">
                         Rp {{ number_format($sale->total_pembayaran) }}
@@ -429,7 +522,7 @@
             @can('delete', $sale)
             <form action="{{ route('penjualan.destroy', $sale->id) }}"
                   method="POST"
-                  onsubmit="return confirm('Yakin ingin membatalkan transaksi!?')" class="mt-2">
+                  onsubmit="return sebelumBatalTransaksi(event)" class="mt-2">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-batal-pos w-100 {{ $sale->status === 'COMPLETED' ? 'disabled' : '' }}">
@@ -441,6 +534,41 @@
     </div>
 </div>
 
+</div>
+
+{{-- ================== MODAL KONFIRMASI CHECKOUT ================== --}}
+<div class="confirm-overlay" id="confirmCheckoutModal">
+    <div class="confirm-box">
+        <div class="confirm-icon">
+            <svg viewBox="0 0 24 24" width="26" height="26">
+                <path d="M12 9v4M12 17h.01M10.29 3.86l-8.18 14.18A1.5 1.5 0 0 0 3.5 20.5h17a1.5 1.5 0 0 0 1.39-2.46L13.71 3.86a1.5 1.5 0 0 0-2.42 0z"
+                      fill="none" stroke="#a3792a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="confirm-title">Yakin ingin checkout?</div>
+        <div class="confirm-sub">Transaksi tidak bisa diubah lagi setelah checkout.</div>
+        <div class="confirm-actions">
+            <button type="button" class="btn-confirm-batal" id="btnBatalConfirm">Batal</button>
+            <button type="button" class="btn-confirm-ya" id="btnYaConfirm">Ya, Checkout</button>
+        </div>
+    </div>
+</div>
+
+{{-- ================== MODAL KONFIRMASI BATAL TRANSAKSI ================== --}}
+<div class="confirm-overlay" id="confirmBatalModal">
+    <div class="confirm-box">
+        <div class="confirm-icon danger">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="#c25e38" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="confirm-title">Yakin ingin membatalkan transaksi?</div>
+        <div class="confirm-sub">Tindakan ini tidak bisa dibatalkan.</div>
+        <div class="confirm-actions">
+            <button type="button" class="btn-confirm-batal" id="btnTidakBatalTransaksi">Tidak</button>
+            <button type="button" class="btn-confirm-ya danger" id="btnYaBatalTransaksi">Ya, Batalkan</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -456,8 +584,6 @@
             document.getElementById('kembalianLabel').innerText = 'Rp 0';
             document.getElementById('cashBox').style.display = 'block';
         } else if (metode === 'QRIS') {
-            document.getElementById('qrisImg').src =
-                'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent('TOTAL:' + totalBelanja);
             document.getElementById('qrisBox').style.display = 'block';
         }
     }
@@ -477,12 +603,16 @@
         }
     }
 
+    /* ---------- Konfirmasi Checkout (modal custom, ganti confirm() bawaan) ---------- */
+    let formCheckoutTerpending = null;
+
     function sebelumCheckout(e) {
+        e.preventDefault();
+
         const metode = document.getElementById('paymentMethod').value;
 
         if (!metode) {
             alert('Pilih metode pembayaran dulu');
-            e.preventDefault();
             return false;
         }
 
@@ -490,12 +620,61 @@
             const diterima = parseFloat(document.getElementById('uangDiterima').value) || 0;
             if (diterima < totalBelanja) {
                 alert('Uang diterima kurang dari total belanja');
-                e.preventDefault();
                 return false;
             }
         }
 
-        return confirm('Yakin ingin checkout?');
+        formCheckoutTerpending = e.target;
+        document.getElementById('confirmCheckoutModal').classList.add('show');
+        return false;
     }
+
+    document.getElementById('btnYaConfirm').addEventListener('click', () => {
+        document.getElementById('confirmCheckoutModal').classList.remove('show');
+        if (formCheckoutTerpending) {
+            formCheckoutTerpending.submit();
+        }
+    });
+
+    document.getElementById('btnBatalConfirm').addEventListener('click', () => {
+        document.getElementById('confirmCheckoutModal').classList.remove('show');
+        formCheckoutTerpending = null;
+    });
+
+    document.getElementById('confirmCheckoutModal').addEventListener('click', (e) => {
+        if (e.target.id === 'confirmCheckoutModal') {
+            e.target.classList.remove('show');
+            formCheckoutTerpending = null;
+        }
+    });
+
+    /* ---------- Konfirmasi Batal Transaksi (modal custom, ganti confirm() bawaan) ---------- */
+    let formBatalTerpending = null;
+
+    function sebelumBatalTransaksi(e) {
+        e.preventDefault();
+        formBatalTerpending = e.target;
+        document.getElementById('confirmBatalModal').classList.add('show');
+        return false;
+    }
+
+    document.getElementById('btnYaBatalTransaksi').addEventListener('click', () => {
+        document.getElementById('confirmBatalModal').classList.remove('show');
+        if (formBatalTerpending) {
+            formBatalTerpending.submit();
+        }
+    });
+
+    document.getElementById('btnTidakBatalTransaksi').addEventListener('click', () => {
+        document.getElementById('confirmBatalModal').classList.remove('show');
+        formBatalTerpending = null;
+    });
+
+    document.getElementById('confirmBatalModal').addEventListener('click', (e) => {
+        if (e.target.id === 'confirmBatalModal') {
+            e.target.classList.remove('show');
+            formBatalTerpending = null;
+        }
+    });
 </script>
 @endsection

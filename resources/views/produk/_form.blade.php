@@ -132,7 +132,7 @@
 <div class="mt-3">
     <label class="produk-form-label">Jenis</label><br>
     <select name="jenis_id"
-            class="form-control @error('jenis_id') is-invalid @enderror">
+            class="form-select @error('jenis_id') is-invalid @enderror">
         <option value="">-- Pilih Jenis --</option>
         @foreach($jenis as $item)
            <option value="{{ $item->id }}"
@@ -149,7 +149,7 @@
 </div>
 
 <div>
-    <label class="produk-form-label">Harga Beli</label><br>
+    <label class="produk-form-label">Harga Pokok</label><br>
     <input type="number" name="purchase_price"
             class="form-control @error('purchase_price') is-invalid @enderror"
             value="{{ old('purchase_price', $produk->harga_beli ?? '') }}">
