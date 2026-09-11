@@ -69,25 +69,21 @@ CREATE TABLE IF NOT EXISTS `item_penjualan` (
   KEY `item_penjualan_produk_id_foreign` (`produk_id`),
   CONSTRAINT `item_penjualan_penjualan_id_foreign` FOREIGN KEY (`penjualan_id`) REFERENCES `penjualan` (`id`),
   CONSTRAINT `item_penjualan_produk_id_foreign` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.item_penjualan: ~5 rows (approximately)
+-- Dumping data for table posriska.item_penjualan: ~11 rows (approximately)
 INSERT INTO `item_penjualan` (`id`, `penjualan_id`, `produk_id`, `kuantitas`, `harga_satuan`, `subtotal`, `created_at`, `updated_at`) VALUES
 	(1, 1, 1, 1, 25000, 25000, '2026-09-01 20:55:53', '2026-09-01 20:55:53'),
 	(2, 1, 6, 1, 18000, 18000, '2026-09-01 20:55:54', '2026-09-01 20:55:54'),
 	(3, 2, 2, 1, 25000, 25000, '2026-09-01 20:56:01', '2026-09-01 20:56:01'),
 	(4, 2, 9, 1, 15000, 15000, '2026-09-01 20:56:04', '2026-09-01 20:56:04'),
 	(5, 2, 3, 1, 45000, 45000, '2026-09-01 20:56:06', '2026-09-01 20:56:06'),
-	(6, 3, 2, 1, 25000, 25000, '2026-09-06 23:42:44', '2026-09-06 23:42:44'),
-	(7, 3, 6, 1, 18000, 18000, '2026-09-06 23:42:47', '2026-09-06 23:42:47'),
-	(8, 3, 3, 1, 45000, 45000, '2026-09-06 23:42:53', '2026-09-06 23:42:53'),
-	(9, 3, 10, 1, 26000, 26000, '2026-09-06 23:43:03', '2026-09-06 23:43:03'),
-	(10, 3, 8, 1, 22000, 22000, '2026-09-06 23:43:07', '2026-09-06 23:43:07'),
-	(11, 3, 1, 1, 25000, 25000, '2026-09-06 23:43:14', '2026-09-06 23:43:14'),
 	(12, 4, 9, 1, 15000, 15000, '2026-09-06 23:45:55', '2026-09-06 23:45:55'),
 	(13, 4, 3, 1, 45000, 45000, '2026-09-06 23:45:58', '2026-09-06 23:45:58'),
 	(14, 5, 5, 1, 20000, 20000, '2026-09-06 23:46:10', '2026-09-06 23:46:10'),
-	(15, 5, 6, 1, 18000, 18000, '2026-09-06 23:46:15', '2026-09-06 23:46:15');
+	(15, 5, 6, 1, 18000, 18000, '2026-09-06 23:46:15', '2026-09-06 23:46:15'),
+	(22, 8, 1, 1, 25000, 25000, '2026-09-10 21:15:41', '2026-09-10 21:15:41'),
+	(23, 8, 7, 1, 19000, 19000, '2026-09-10 21:15:44', '2026-09-10 21:15:44');
 
 -- Dumping structure for table posriska.jenis
 CREATE TABLE IF NOT EXISTS `jenis` (
@@ -97,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `jenis` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `jenis_nama_jenis_unique` (`nama_jenis`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table posriska.jenis: ~2 rows (approximately)
 INSERT INTO `jenis` (`id`, `nama_jenis`, `created_at`, `updated_at`) VALUES
@@ -142,9 +138,9 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.migrations: ~9 rows (approximately)
+-- Dumping data for table posriska.migrations: ~10 rows (approximately)
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '0001_01_01_000000_create_roles_table', 1),
 	(2, '0001_01_01_000000_create_users_table', 1),
@@ -154,7 +150,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(6, '2026_04_20_072912_create_penjualan_table', 1),
 	(7, '2026_04_20_073738_create_item_penjualan_table', 1),
 	(8, '2026_08_21_012540_create_jenis_table', 1),
-	(9, '2026_08_21_013642_add_jenis_id_to_produk_table', 1);
+	(9, '2026_08_21_013642_add_jenis_id_to_produk_table', 1),
+	(10, '2026_09_09_035142_add_uang_diterima_kembalian_to_sales_table', 2);
 
 -- Dumping structure for table posriska.password_reset_tokens
 CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
@@ -172,21 +169,23 @@ CREATE TABLE IF NOT EXISTS `penjualan` (
   `user_id` bigint unsigned NOT NULL,
   `total_pembayaran` int NOT NULL,
   `metode_pembayaran` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uang_diterima` bigint unsigned DEFAULT NULL,
+  `kembalian` bigint unsigned DEFAULT NULL,
   `status` enum('OPEN','COMPLETED') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `penjualan_user_id_foreign` (`user_id`),
   CONSTRAINT `penjualan_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.penjualan: ~2 rows (approximately)
-INSERT INTO `penjualan` (`id`, `user_id`, `total_pembayaran`, `metode_pembayaran`, `status`, `created_at`, `updated_at`) VALUES
-	(1, 2, 43000, 'CASH', 'COMPLETED', '2026-09-01 20:55:47', '2026-09-01 20:55:57'),
-	(2, 2, 85000, 'QRIS', 'COMPLETED', '2026-09-01 20:55:59', '2026-09-01 20:56:11'),
-	(3, 7, 161000, 'CASH', 'OPEN', '2026-09-06 23:42:41', '2026-09-06 23:43:14'),
-	(4, 8, 60000, 'QRIS', 'COMPLETED', '2026-09-06 23:45:51', '2026-09-06 23:46:03'),
-	(5, 8, 38000, 'CASH', 'OPEN', '2026-09-06 23:46:06', '2026-09-06 23:46:15');
+-- Dumping data for table posriska.penjualan: ~5 rows (approximately)
+INSERT INTO `penjualan` (`id`, `user_id`, `total_pembayaran`, `metode_pembayaran`, `uang_diterima`, `kembalian`, `status`, `created_at`, `updated_at`) VALUES
+	(1, 2, 43000, 'CASH', NULL, NULL, 'COMPLETED', '2026-09-01 20:55:47', '2026-09-01 20:55:57'),
+	(2, 2, 85000, 'QRIS', NULL, NULL, 'COMPLETED', '2026-09-01 20:55:59', '2026-09-01 20:56:11'),
+	(4, 8, 60000, 'QRIS', NULL, NULL, 'COMPLETED', '2026-09-06 23:45:51', '2026-09-06 23:46:03'),
+	(5, 8, 38000, 'CASH', NULL, NULL, 'OPEN', '2026-09-06 23:46:06', '2026-09-06 23:46:15'),
+	(8, 7, 44000, 'CASH', 100000, 56000, 'COMPLETED', '2026-09-10 21:15:38', '2026-09-10 21:18:02');
 
 -- Dumping structure for table posriska.produk
 CREATE TABLE IF NOT EXISTS `produk` (
@@ -206,20 +205,20 @@ CREATE TABLE IF NOT EXISTS `produk` (
   KEY `produk_jenis_id_foreign` (`jenis_id`),
   CONSTRAINT `produk_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `jenis` (`id`) ON DELETE SET NULL,
   CONSTRAINT `produk_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.produk: ~0 rows (approximately)
+-- Dumping data for table posriska.produk: ~10 rows (approximately)
 INSERT INTO `produk` (`id`, `jenis_id`, `user_id`, `foto`, `nama`, `harga_beli`, `harga_jual`, `stok`, `created_at`, `updated_at`) VALUES
-	(1, 2, 2, 'products/bEyXwaGpPatbS0KzyHimmej021ht5GGBsuxZP9BV.jpg', 'Brownies', 20000, 25000, 48, '2026-09-01 20:37:39', '2026-09-06 23:43:14'),
-	(2, 2, 2, 'products/d3DR4WDTK2JGaJNbLOxF5ReCVa49S6M4dRx5YSKK.jpg', 'Chocolate Cookies And Cream Cookies', 20000, 25000, 48, '2026-09-01 20:38:46', '2026-09-06 23:42:44'),
-	(3, 2, 2, 'products/6gODxi94EjmgbJRbOh885hlGSgCXKOyaXLItqWuI.jpg', 'Lemon Blueberry Sourdough Bread', 35000, 45000, 57, '2026-09-01 20:39:33', '2026-09-06 23:45:58'),
-	(4, 2, 2, 'products/zN3kqt3M8NUFc2fN32c87Y3XmxolGu3qCz46PAI1.jpg', 'Cinnamon rolls', 30000, 35000, 50, '2026-09-01 20:45:08', '2026-09-01 20:45:08'),
+	(1, 2, 2, 'products/bEyXwaGpPatbS0KzyHimmej021ht5GGBsuxZP9BV.jpg', 'Brownies', 20000, 25000, 48, '2026-09-01 20:37:39', '2026-09-10 21:15:41'),
+	(2, 2, 2, 'products/d3DR4WDTK2JGaJNbLOxF5ReCVa49S6M4dRx5YSKK.jpg', 'Chocolate Cookies And Cream Cookies', 20000, 25000, 49, '2026-09-01 20:38:46', '2026-09-10 21:15:10'),
+	(3, 2, 2, 'products/6gODxi94EjmgbJRbOh885hlGSgCXKOyaXLItqWuI.jpg', 'Lemon Blueberry Sourdough Bread', 35000, 45000, 58, '2026-09-01 20:39:33', '2026-09-10 19:16:30'),
+	(4, 2, 2, 'products/zN3kqt3M8NUFc2fN32c87Y3XmxolGu3qCz46PAI1.jpg', 'Cinnamon rolls', 30000, 35000, 50, '2026-09-01 20:45:08', '2026-09-10 21:15:10'),
 	(5, 2, 2, 'products/IAqDKeYGg3LJlCwOTWKb4ID1xLsPyTzHwBbzJy28.jpg', 'Tiramisu Croissant', 15000, 20000, 59, '2026-09-01 20:47:11', '2026-09-06 23:46:10'),
-	(6, 1, 2, 'products/jWo2udQS9YEAFLpmeqwV06HeDhBn9LHUJYccgkkc.jpg', 'Iced Americano', 10000, 18000, 47, '2026-09-01 20:48:45', '2026-09-06 23:46:15'),
-	(7, 1, 2, 'products/vrLHGKxUp1G9P8cxaC11d7J83u8Wh7LsTWsCB8XT.jpg', 'Signature Iced Chocolate', 12000, 19000, 60, '2026-09-01 20:49:47', '2026-09-01 20:49:47'),
-	(8, 1, 2, 'products/fpTeZ1zywX1I58Dd9ZugJmPJavW2k6dy9klGC6Rs.jpg', 'Signature Iced Matcha Latte', 15000, 22000, 59, '2026-09-01 20:50:36', '2026-09-06 23:43:07'),
-	(9, 1, 2, 'products/WCfjDj7q8LHCBgizxFRz3ilOVhMynAojNnh7GEdk.jpg', 'Iced Plain Latte (Espresso Base)', 10000, 15000, 48, '2026-09-01 20:51:20', '2026-09-06 23:45:55'),
-	(10, 1, 2, 'products/MEc8tIrT84HZ8a5UGq5Lgvk04rXRMhK0i9avozOc.jpg', 'Signature Iced Hazelnut Chocolate', 19000, 26000, 59, '2026-09-01 20:55:39', '2026-09-06 23:43:03');
+	(6, 1, 2, 'products/jWo2udQS9YEAFLpmeqwV06HeDhBn9LHUJYccgkkc.jpg', 'Iced Americano', 10000, 18000, 48, '2026-09-01 20:48:45', '2026-09-10 19:16:34'),
+	(7, 1, 2, 'products/vrLHGKxUp1G9P8cxaC11d7J83u8Wh7LsTWsCB8XT.jpg', 'Signature Iced Chocolate', 12000, 19000, 59, '2026-09-01 20:49:47', '2026-09-10 21:15:44'),
+	(8, 1, 2, 'products/fpTeZ1zywX1I58Dd9ZugJmPJavW2k6dy9klGC6Rs.jpg', 'Signature Iced Matcha Latte', 15000, 22000, 60, '2026-09-01 20:50:36', '2026-09-10 19:16:27'),
+	(9, 1, 2, 'products/WCfjDj7q8LHCBgizxFRz3ilOVhMynAojNnh7GEdk.jpg', 'Iced Plain Latte (Espresso Base)', 10000, 15000, 48, '2026-09-01 20:51:20', '2026-09-10 20:49:40'),
+	(10, 1, 2, 'products/MEc8tIrT84HZ8a5UGq5Lgvk04rXRMhK0i9avozOc.jpg', 'Signature Iced Hazelnut Chocolate', 19000, 26000, 60, '2026-09-01 20:55:39', '2026-09-10 19:16:32');
 
 -- Dumping structure for table posriska.roles
 CREATE TABLE IF NOT EXISTS `roles` (
@@ -230,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.roles: ~0 rows (approximately)
+-- Dumping data for table posriska.roles: ~2 rows (approximately)
 INSERT INTO `roles` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(1, 'admin', '2026-09-01 20:02:58', '2026-09-01 20:02:58'),
 	(2, 'kasir', '2026-09-01 20:02:58', '2026-09-01 20:02:58');
@@ -248,9 +247,9 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table posriska.sessions: ~0 rows (approximately)
+-- Dumping data for table posriska.sessions: ~1 rows (approximately)
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-	('lat5PI3KlPTY07h8CgNlgo8X1j3iVBBfNHmCYgQ6', 7, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVkNNbFlTNW1GYkhvcEdUWm1JQ3FDRXpTSnV1QnB2aW5nMUZoM1JTOCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wZW5qdWFsYW4iO3M6NToicm91dGUiO3M6MTU6InBlbmp1YWxhbi5pbmRleCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjc7fQ==', 1788764614);
+	('KynOImxmw2bg9gKGDzIIBJ1D4FI2Sh9ZvQcxOFqh', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSjBENnd4RDlxZWRDOEFkdTZWUzR0RkU3QUZaWklCV2NsNjJ0czdnSiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7czo1OiJyb3V0ZSI7czo1OiJsb2dpbiI7fX0=', 1789101419);
 
 -- Dumping structure for table posriska.users
 CREATE TABLE IF NOT EXISTS `users` (
