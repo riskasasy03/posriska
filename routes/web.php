@@ -20,6 +20,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    Route::get('/about', function () {
+        return view('about.index');
+    })->name('about');
+
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users');
         Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
@@ -35,5 +39,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/itempenjualan', ItemPenjualanController::class);
         Route::resource('jenis', JenisController::class)->parameters(['jenis' => 'jenis']);
     });
+
+
 
 });
